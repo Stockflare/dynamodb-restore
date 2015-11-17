@@ -12,7 +12,6 @@ opts = Slop.parse do |o|
   o.string '-t', '--table', 'DynamoDB Table to restore, defaults to ${TABLE_NAME}', default: ENV['TABLE_NAME']
   o.string '-b', '--bucket', 'Bucket containing backup files, defaults to  ${BACKUP_FILE_BUCKET}', default: ENV['BACKUP_FILE_BUCKET']
   o.string '-f', '--file', 'The file to restore, including any s3 folder paths, defaults to ${FILE}', default: ENV['FILE']
-  o.string '-d', '--decode', 'Decode the row data from Base64, defaults to true', default: true
   o.string '-k', '--kinesis-stream', 'Kinesis Stream to process put requests, see lambda-dynamodb-put, defaults to ${KINESIS_STREAM}', default: ENV['KINESIS_STREAM']
   o.integer '-p','--partitions', 'The number of partitions / shards to use when sending to the Kinesis Stream, defaults to 10', default: 10
   o.string '-r', '--region', 'Region for AWS API calls, defaults to ${AWS_REGION}', default: ENV['AWS_REGION']
@@ -56,12 +55,8 @@ records = []
 
 CSV.foreach(full_file_name, converters: nil, encoding: "UTF-8", headers: false) do |row|
   # Extract the row data
-  if opts[:decode]
-    text = Base64.decode64(row[0])
-    item = JSON.parse(text)
-  else
-    item = JSON.parse(row[0])
-  end
+  text = Base64.decode64(row[0])
+  item = JSON.parse(text)
 
   # Set up the Kinesis Payload
   request = request + 1
