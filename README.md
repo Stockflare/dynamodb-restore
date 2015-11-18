@@ -8,7 +8,7 @@ Although the Backup script is a Node.JS JavaScript project, the AWS JavaScript A
 Data restoration is a two step process:
 * This script will download the S3 CSV backup file
 * Each record will be read
-* The record will be Base64 decoded if the --decode option has been used
+* The record will be Base64 decoded
 * the record will be JSON.parsed
 * At this stage you should have a reconstituted DynamoDB Item like the one below
  ```
@@ -31,16 +31,16 @@ Records are sent to Kinesis in batches of 500 records or 4.75MB of data.
 ## Usage
 ```
 usage: ./dynamodb-restore.rb [options]
-    -t, --table           DynamoDB Table to restore
+    -t, --table           DynamoDB Table to restore, defaults to ${TABLE_NAME}
     -b, --bucket          Bucket containing backup files, defaults to  ${BACKUP_FILE_BUCKET}
-    -f, --file            The file to restore, including any s3 folder paths
-    -d, --decode          Decode the row data from Base64
+    -f, --file            The file to restore, including any s3 folder paths, defaults to ${FILE}
     -k, --kinesis-stream  Kinesis Stream to process put requests, see lambda-dynamodb-put, defaults to ${KINESIS_STREAM}
-    -p, --partitions      The number of partitions / shards to use when sending to the Kinesis Stream, defaults to 10
+    -p, --partitions      The number of partitions to use when sending to the Kinesis Stream, defaults to 500
     -r, --region          Region for AWS API calls, defaults to ${AWS_REGION}
     --help                Display Help
     --version             print the version
 ```
+You will notice that all important parameters are defaulted from Environment variables.  This is to allow for easy launching from the Amazon AWS ECS Container Service console.
 
 ## Cloudformation
 The provided Cloudformation will deploy a ECS Container Service Task Definition that can be launched to execute restores.  This Cloudformation requires that the stacks for https://github.com/Stockflare/lambda-dynamodb-put and https://github.com/Stockflare/dynamodb-backup are already launched.
