@@ -13,7 +13,7 @@ opts = Slop.parse do |o|
   o.string '-b', '--bucket', 'Bucket containing backup files, defaults to  ${BACKUP_FILE_BUCKET}', default: ENV['BACKUP_FILE_BUCKET']
   o.string '-f', '--file', 'The file to restore, including any s3 folder paths, defaults to ${FILE}', default: ENV['FILE']
   o.string '-k', '--kinesis-stream', 'Kinesis Stream to process put requests, see lambda-dynamodb-put, defaults to ${KINESIS_STREAM}', default: ENV['KINESIS_STREAM']
-  o.integer '-p','--partitions', 'The number of partitions / shards to use when sending to the Kinesis Stream, defaults to 10', default: 10
+  o.integer '-p','--partitions', 'The number of partitions to use when sending to the Kinesis Stream, defaults to 500', default: 500
   o.string '-r', '--region', 'Region for AWS API calls, defaults to ${AWS_REGION}', default: ENV['AWS_REGION']
   o.boolean '--help', 'Display Help'
   o.on '--version', 'print the version' do
