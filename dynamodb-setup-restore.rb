@@ -63,7 +63,7 @@ File.open(full_file_name, 'wb') do |file|
 end
 
 # Split the input file into chunks
-cmd = "cd #{folder}; split --lines=10000 --verbose --numeric-suffixes=0 #{full_file_name} #{chunk_prefix}"
+cmd = "cd #{folder}; split --lines=#{opts['chunk-size']} --verbose --numeric-suffixes=0 #{full_file_name} #{chunk_prefix}"
 puts cmd
 `#{cmd}`
 
