@@ -95,3 +95,19 @@ CSV.foreach(full_file_name, converters: nil, encoding: "UTF-8", headers: false) 
   end
   puts "Sent record: #{request}"
 end
+
+if records.count > 0
+  # Put the last set of records
+  begin
+    resp = kinesis.put_records({
+      stream_name: opts['kinesis-stream'],
+      records: records
+    })
+    puts resp.inspect
+    # Reset the bulk request
+    records = []
+  rescue Aws::Kinesis::Errors::ServiceError => e
+    puts e.inspect
+    exit
+  end  
+end
