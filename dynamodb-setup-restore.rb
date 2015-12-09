@@ -32,7 +32,7 @@ if opts[:help]
 end
 
 # The local folder to downlod S3 file to
-folder = Pathname.new('/stockflare/data/dynamodb_backup')
+folder = Pathname.new("/stockflare/data/dynamodb_backup_#{Time.now.strftime('%FT%T%:z')}")
 # The full path of the local CSV file
 full_file_name = folder + Pathname.new(opts[:file]).basename
 
